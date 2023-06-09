@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -190,6 +190,7 @@ Color.Blue;
 
 //код на создание подсказок и автозаполнение с помощью коллекций значений
 [System.ComponentModel.Browsable(true)]
+
 public System.Windows.Forms.AutoCompleteMode AutoCompleteMode { get; set; }
 
     // Create the list to use as the custom source. 
@@ -232,6 +233,11 @@ private void Form1_Load(object sender, EventArgs e)
 {
     this.MinimumSize = new Size(250, 250);
 }
+
+//создание табуляции кодом
+    Button1.TabIndex = 1;
+//разрешение или запрет табуляции
+Button1.TabStop = false;
 
 
 1. Триггер, который будет отслеживать добавление записей в
@@ -337,5 +343,55 @@ https://www.internet-technologies.ru/articles/sozdanie-form-registracii-i-avtori
             else MessageBox.Show("Неверный пароль или логин");
 
         }
+
+
+пример вызова одного метода в другой
+
+public partial class AdventureWorksEntities : ObjectContext
+{
+    [EdmFunction("AdventureWorksModel", "GetProductRevenue")]
+    public decimal? GetProductRevenue(int productId)
+    {
+        return this.QueryProvider.Execute<decimal?>(Expression.Call(
+            Expression.Constant(this),
+            (MethodInfo)MethodInfo.GetCurrentMethod(),
+            Expression.Constant(productId, typeof(int))));
+    }
+}
+
+using (AdventureWorksEntities AWEntities = new AdventureWorksEntities())
+{
+    int productId = 776;
+
+    Console.WriteLine(AWEntities.GetProductRevenue(productId));
+}
+
+//пример высплывающего окна с ошибкой
+
+int DisplayConfirmSaveAsMessageBox()
+{
+    int msgboxID = MessageBox(
+        NULL,
+        L"temp.txt already exists.\nDo you want to replace it?",
+        L"Confirm Save As",
+        MB_ICONEXCLAMATION | MB_YESNO
+    );
+
+    if (msgboxID == IDYES)
+    {
+        // TODO: add code
+    }
+
+    return msgboxID;    
+}
+
+https://github.com/JacobsElmar/2nd-Year-C-and-SQL-project
+
+https://github.com/tiboth/CSharp-and-SQL-CRUD-operations
+
+https://github.com/georoilos/Database-UI
+
+
+
  
  */
